@@ -1,6 +1,38 @@
 <?php
 
 //funtion to import contacts ---->
+
+function parseContacts($filename)
+{
+    $contacts = array();
+
+    // todo - read file and parse contacts
+    $handle = fopen($filename, 'r');
+    $contents = fread($handle, filesize($filename));
+    $contents = trim($contents);
+
+    $contentsArray = explode(PHP_EOL, $contents);
+    foreach($contentsArray as $contact){
+        $contact = explode("|", $contact);
+        $contactArray = [];
+        $contactArray["name"] = $contact[0];
+
+        $areaCode = substr($contact[1], 0, 3);
+        $prefix = substr($contact[1], 3, 3);
+        $number = substr($contact[1], 6, 4);
+
+        $contactArray["number"] = $areaCode . "-" . $prefix . "-" .  $number;
+
+        array_push($contacts, $contactArray);
+    }
+
+    return $contacts;
+}
+
+$contactsArray = parseContacts("contacts.txt");
+
+print_r($contactsArray);
+
     //fopen()
     
     //create array
@@ -37,10 +69,19 @@
     //User input
 
 showMenu();
-//show menu ----->
+
+//show contacts ----->
     // take in contacts array and output contacts according to format
+function showContacts($contactArray){
+    $contacts = $contactArray;
+    echo "Name   |    Number" . PHP_EOL . "---------------------" . PHP_EOL;
+    foreach ($contacts as $contact)
+    {
+        echo $contact['name'] . " | " . $contact['number'] . PHP_EOL;
+    }
+}
 
-
+showContacts($contactsArray);
 // add contact ---->
     // push new contact to array
 
