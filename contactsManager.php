@@ -29,9 +29,9 @@ function parseContacts($filename)
     return $contacts;
 }
 
-$contactsArray = parseContacts("contacts.txt");
+$contacts = parseContacts("contacts.txt");
 
-print_r($contactsArray);
+// print_r($contactsArray);
 
     //fopen()
     
@@ -48,16 +48,30 @@ print_r($contactsArray);
 //function showMenu() --->
     //make the function write to the command line
 
-    function showMenu ()
-    {
-        $menuArray = ["1 View Contacts", "2 Add New Contact", "3 Search by Contact Name", "4 Delete Existing Contact", "5 Exit"];
-        foreach($menuArray as $data)
-        {
-            echo $data . PHP_EOL;
-            
-        }
-
+function showMenu ()
+{
+    $menuArray = ["1 View Contacts", "2 Add New Contact", "3 Search by Contact Name", "4 Delete Existing Contact", "5 Exit"];
+    foreach($menuArray as $data)
+    {   
+        echo $data . PHP_EOL;
     }
+    menuSelection();
+
+}
+
+function menuSelection()
+{
+    $userSelection = "";
+    fwrite(STDOUT, PHP_EOL . "Selection: ");
+    $userSelection = trim(fgets(STDIN));
+
+    switch ($userSelection)
+    {
+        case ("1"):
+            return showContacts(parseContacts('contacts.txt'));
+            break;
+    }
+}
 
     //Print Menu
         // View contacts.
@@ -72,20 +86,22 @@ showMenu();
 
 //show contacts ----->
     // take in contacts array and output contacts according to format
-function showContacts($contactArray){
-    $contacts = $contactArray;
+function showContacts($contactsArray){
+    $contacts = $contactsArray;
+
     echo "Name   |    Number" . PHP_EOL . "---------------------" . PHP_EOL;
+
     foreach ($contacts as $contact)
     {
         echo $contact['name'] . " | " . $contact['number'] . PHP_EOL;
     }
 }
 
-showContacts($contactsArray);
+// showContacts($contactsArray);
 // add contact ---->
     // push new contact to array
 // no key
-function addContact($contactArray) {
+function addContact($contactsArray) {
     $newContact = [];
 
 
@@ -98,7 +114,7 @@ function addContact($contactArray) {
     $newContact['name'] = $name;
     $newContact['number'] = $number;
 
-    array_push($contactArray,$newContact);
+    array_push($contactsArray,$newContact);
 
 }
 
