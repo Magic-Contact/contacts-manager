@@ -1,12 +1,9 @@
 <?php
 
-//funtion to import contacts ---->
-
 function displayContacts($filename)
 {
     $contacts = array();
 
-    // todo - read file and parse contacts
     $handle = fopen($filename, 'r');
     $contents = fread($handle, filesize($filename));
     $contents = trim($contents);
@@ -25,23 +22,14 @@ function displayContacts($filename)
 
         array_push($contacts, $contactArray);
     }
-
+    fclose($handle);
     return $contacts;
 }
 
-$contacts = parseContacts("contacts.txt");
+// $contacts = parseContacts("contacts.txt");
 
-// print_r($contactsArray);
-
-    //fopen()
-    
-    //create array
-        // user can access and change array while program is running
-
-    // fclose()
 function parseContacts($filename) 
 {
-
     $contacts = array();
 
     // todo - read file and parse contacts
@@ -58,10 +46,7 @@ function parseContacts($filename)
 
         array_push($contacts, $contactArray);
     }
-
     return $contacts; 
-
-
 }
 
 
@@ -92,10 +77,12 @@ function menuSelection()
     switch ($userSelection)
     {
         case ("1"):
-            return showContacts(displayContacts('contacts.txt'));
+            echo showContacts(displayContacts('contacts.txt')) . PHP_EOL;
+            echo showMenu();
             break;
         case ("2"):
-            return addContact(parseContacts('contacts.txt'));
+            echo addContact(parseContacts('contacts.txt')) . PHP_EOL;
+            echo showMenu();
             break;
         case ("3"):
             return searchContacts(parseContacts('contacts.txt'));
@@ -104,7 +91,7 @@ function menuSelection()
             return deleteContacts(parseContacts('contacts.txt'));
             break;
         case ("5"):
-            return exit();
+            echo "GOODBYE!" . PHP_EOL;
     }
 }
 
@@ -155,13 +142,39 @@ function addContact($contactsArray) {
     foreach($contactsArray as $contact){
         $contactString .= $contact['name'] . '|' . $contact['number'] . PHP_EOL;
     }
-    echo $contactString;
-    // $handle = fopens('contacts.txt', "w");
-    // fwrite($handle, $contactString);
+    // echo $contactString;
+    $handle = fopen('contacts.txt', "w");
+    fwrite($handle, $contactString);
+    fclose($handle);
+    clearstatcache();
+    showContacts(displayContacts('contacts.txt'));
 
 }
 
+function searchContacts($contactArray)
+{   
+    $contacts = $contactArray;
 
+    fwrite(STDOUT, "Who do you want to find?: ");
+    $searchString = trim(fgets(STDIN));
+    // $result = '';
+    foreach ($contacts as $contact)
+    {
+        $contact = explode("|", $contact);
+        if (array_search($searchString, $contact) === false)
+        {
+            continue;
+        } else {
+            $result = array_search($searchString, $contact);
+            break;
+        }
+    }
+    
+    // if ($result == false){
+    //     echo "SORRY";
+    // }
+    echo $result;
+}
     // check that user input is correct (name, phone number)
 
 //search contact ----->
