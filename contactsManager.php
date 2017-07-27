@@ -14,6 +14,18 @@
 
 
 //function showMenu() --->
+    //make the function write to the command line
+
+    function showMenu ()
+    {
+        $menuArray = ["1 View Contacts", "2 Add New Contact", "3 Search by Contact Name", "4 Delete Existing Contact", "5 Exit"];
+        foreach($menuArray as $data)
+        {
+            echo $data . PHP_EOL;
+            
+        }
+
+    }
 
     //Print Menu
         // View contacts.
@@ -24,7 +36,7 @@
 
     //User input
 
-
+showMenu();
 //show menu ----->
     // take in contacts array and output contacts according to format
 
@@ -49,6 +61,11 @@
 
 
 // exit ---------->
+
+// function exitContactsManager ()
+// {
+
+// }
 
     // this is a do-while loop
 
