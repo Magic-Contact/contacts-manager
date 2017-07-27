@@ -2,7 +2,7 @@
 
 //funtion to import contacts ---->
 
-function parseContacts($filename)
+function displayContacts($filename)
 {
     $contacts = array();
 
@@ -39,6 +39,30 @@ $contacts = parseContacts("contacts.txt");
         // user can access and change array while program is running
 
     // fclose()
+function parseContacts($filename) 
+{
+
+    $contacts = array();
+
+    // todo - read file and parse contacts
+    $handle = fopen($filename, 'r');
+    $contents = fread($handle, filesize($filename));
+    $contents = trim($contents);
+
+    $contentsArray = explode(PHP_EOL, $contents);
+    foreach($contentsArray as $contact){
+        $contact = explode("|", $contact);
+        $contactArray = [];
+        $contactArray["name"] = $contact[0];
+        $contactArray["number"] = $contact[1];
+
+        array_push($contacts, $contactArray);
+    }
+
+    return $contacts; 
+
+
+}
 
 
 // Menu option variable = 1, 2, 3, 4, 5
@@ -68,8 +92,19 @@ function menuSelection()
     switch ($userSelection)
     {
         case ("1"):
-            return showContacts(parseContacts('contacts.txt'));
+            return showContacts(displayContacts('contacts.txt'));
             break;
+        case ("2"):
+            return addContact(parseContacts('contacts.txt'));
+            break;
+        case ("3"):
+            return searchContacts(parseContacts('contacts.txt'));
+            break;
+        case ("4"):
+            return deleteContacts(parseContacts('contacts.txt'));
+            break;
+        case ("5"):
+            return exit();
     }
 }
 
@@ -115,6 +150,14 @@ function addContact($contactsArray) {
     $newContact['number'] = $number;
 
     array_push($contactsArray,$newContact);
+
+    $contactString = "";
+    foreach($contactsArray as $contact){
+        $contactString .= $contact['name'] . '|' . $contact['number'] . PHP_EOL;
+    }
+    echo $contactString;
+    // $handle = fopens('contacts.txt', "w");
+    // fwrite($handle, $contactString);
 
 }
 
