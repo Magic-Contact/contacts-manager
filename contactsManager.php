@@ -84,6 +84,24 @@ function showContacts($contactArray){
 showContacts($contactsArray);
 // add contact ---->
     // push new contact to array
+// no key
+function addContact($contactArray) {
+    $newContact = [];
+
+
+    fwrite(STDOUT, "Please Enter Contact Name: " );
+    $name = trim(fgets(STDIN));
+
+    fwrite(STDOUT, "Please Enter Contact Number: " );
+    $number = trim(fgets(STDIN));
+
+    $newContact['name'] = $name;
+    $newContact['number'] = $number;
+
+    array_push($contactArray,$newContact);
+
+}
+
 
     // check that user input is correct (name, phone number)
 
