@@ -1,30 +1,30 @@
 <?php
 
-function displayContacts($filename)
-{
-    $contacts = array();
+// function displayContacts($filename)
+// {
+//     $contacts = array();
 
-    $handle = fopen($filename, 'r');
-    $contents = fread($handle, filesize($filename));
-    $contents = trim($contents);
+//     $handle = fopen($filename, 'r');
+//     $contents = fread($handle, filesize($filename));
+//     $contents = trim($contents);
 
-    $contentsArray = explode(PHP_EOL, $contents);
-    foreach($contentsArray as $contact){
-        $contact = explode("|", $contact);
-        $contactArray = [];
-        $contactArray["name"] = $contact[0];
+//     $contentsArray = explode(PHP_EOL, $contents);
+//     foreach($contentsArray as $contact){
+//         $contact = explode("|", $contact);
+//         $contactArray = [];
+//         $contactArray["name"] = $contact[0];
 
-        $areaCode = substr($contact[1], 0, 3);
-        $prefix = substr($contact[1], 3, 3);
-        $number = substr($contact[1], 6, 4);
+//         $areaCode = substr($contact[1], 0, 3);
+//         $prefix = substr($contact[1], 3, 3);
+//         $number = substr($contact[1], 6, 4);
 
-        $contactArray["number"] = $areaCode . "-" . $prefix . "-" .  $number;
+//         $contactArray["number"] = $areaCode . "-" . $prefix . "-" .  $number;
 
-        array_push($contacts, $contactArray);
-    }
-    fclose($handle);
-    return $contacts;
-}
+//         array_push($contacts, $contactArray);
+//     }
+//     fclose($handle);
+//     return $contacts;
+// }
 
 // $contacts = parseContacts("contacts.txt");
 
@@ -81,7 +81,7 @@ function menuSelection()
             echo showMenu();
             break;
         case ("2"):
-            echo addContact(parseContacts('contacts.txt')) . PHP_EOL;
+            echo addContact() . PHP_EOL;
             echo showMenu();
             break;
         case ("3"):
@@ -141,7 +141,7 @@ function addContact() {
     fwrite($handle, $contactString);
     fclose($handle);
     clearstatcache();
-    showContacts(displayContacts('contacts.txt'));
+    showContacts(parseContacts('contacts.txt'));
 
 }
 
