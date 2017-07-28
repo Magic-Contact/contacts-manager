@@ -58,8 +58,8 @@ function parseContacts($filename)
     //make the function write to the command line
 
 function showMenu ()
-{
-    $menuArray = ["1 View Contacts", "2 Add New Contact", "3 Search by Contact Name", "4 Delete Existing Contact", "5 Exit"];
+{   
+    $menuArray = ["MAGIC CONTACT MANAGER" . PHP_EOL . "----------------" . PHP_EOL, "1 View Contacts", "2 Add New Contact", "3 Search by Contact Name", "4 Delete Existing Contact", "5 Exit"];
     foreach($menuArray as $data)
     {   
         echo $data . PHP_EOL;
@@ -88,7 +88,7 @@ function menuSelection()
             return searchContacts(parseContacts('contacts.txt'));
             break;
         case ("4"):
-            return deleteContacts(parseContacts('contacts.txt'));
+            return deleteContact(parseContacts('contacts.txt'));
             break;
         case ("5"):
             echo "GOODBYE!" . PHP_EOL;
@@ -160,10 +160,59 @@ function searchContacts($contactArray)
             array_push($result, $contact);
         }
     } 
-    return showContacts($result);
+    return showContacts($result) . PHP_EOL;
 }   
 
+function deleteContact($contactsArray){
 
+    //  $newContact = [];
+    $contacts = $contactsArray;
+ 
+    fwrite(STDOUT, "Who would you like to delete? " );
+    $searchString = trim(fgets(STDIN));
+
+    $results=[];
+    $index = 0;
+    $resultIndices = [];
+    foreach($contacts as $contact)
+    {
+        if (strstr($contact['name'], $searchString))
+        {
+            array_push($results, $contact);
+            array_push($resultIndices, $index);
+        }
+        $index++;
+    } 
+
+    echo showContacts($results) . PHP_EOL;
+
+    fwrite(STDOUT, "Are you sure you want to delete contact(s)? ");
+    $confirm = trim(fgets(STDIN));
+
+    if (strtolower($confirm) == strtolower('y') | strtolower($confirm) == strtolower('yes')){
+
+        $contactString = "";
+        foreach($contactsArray as $contact){
+            foreach ($results as $result)
+            {
+                if ($contact == $result){
+                    echo "skipping" . PHP_EOL;
+                    continue;
+                }
+                $contactString .= $contact['name'] . '|' . $contact['number'] . PHP_EOL;
+            }
+
+        }
+        // array_push($contactArray,$newContact);
+        $handle = fopen('contacts.txt', "w");
+        fwrite($handle, $contactString);
+        fclose($handle);
+        clearstatcache();
+    }
+    
+    showContacts(parseContacts('contacts.txt'));
+    showMenu();
+}
     // if ($result == false){
     //     echo "SORRY";
     // }
